@@ -117,7 +117,7 @@ func Register(when uint8, cmds []string, cb func(Event)) {
 	tmp := []uint16{}
 
 	for _, v := range cmds {
-		tmp = append(tmp, Keycode[v])
+		tmp = append(tmp, KeychartoRawcode(v))
 	}
 
 	keys[key] = tmp
@@ -132,9 +132,9 @@ func Process(EvChan <-chan Event) (out chan bool) {
 	go func() {
 		for ev := range EvChan {
 			if ev.Kind == KeyDown || ev.Kind == KeyHold {
-				pressed[ev.Keycode] = true
+				pressed[ev.Rawcode] = true
 			} else if ev.Kind == KeyUp {
-				pressed[ev.Keycode] = false
+				pressed[ev.Rawcode] = false
 			}
 
 			for _, v := range events[ev.Kind] {
